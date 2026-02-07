@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SEO Page Audit</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>SEO Page Audit</h1>
+      <div class="tabs">
+        <button class="tab-button active" data-tab="current-page">Current Page</button>
+        <button class="tab-button" data-tab="compare">Compare</button>
+        <button class="tab-button" data-tab="website-audit">Website Audit</button>
+      </div>
+    </header>
+
+    <div id="loading" class="loading">
+      <p>Analyzing page...</p>
+    </div>
+
+    <!-- Tab 1: Current Page -->
+    <div id="tab-current-page" class="tab-content active">
+      <div id="content" class="content" style="display: none;">
+      <!-- SEO Score - Full Width -->
+      <section class="metric-group full-width">
+        <div id="seo_score" class="seo-score-display"></div>
+      </section>
+
+      <!-- Article Parsing Selector -->
+      <section class="metric-group full-width parsing-selector">
+        <div class="parsing-control">
+          <label for="parsing-method">Article Content:</label>
+          <select id="parsing-method" class="parsing-dropdown">
+            <option value="auto">Auto Detect (Recommended)</option>
+            <option value="article">&lt;article&gt; tag</option>
+            <option value="main">&lt;main&gt; tag</option>
+            <option value="h1">After &lt;h1&gt;</option>
+            <option value="h2">After first &lt;h2&gt;</option>
+            <option value="everything">Entire page</option>
+          </select>
+        </div>
+      </section>
+
+      <!-- Two Column Layout -->
+      <div class="two-column-layout">
+        <!-- Left Column -->
+        <div class="column">
+          <!-- Main Keyword -->
+          <section class="metric-group compact">
+            <h2>Main Keyword</h2>
+            <div id="main_keyword" class="metric-value"></div>
+          </section>
+
+          <!-- Title -->
+          <section class="metric-group compact">
+            <h2>Title</h2>
+            <div id="title" class="metric-value"></div>
+          </section>
+
+          <!-- Meta Tags -->
+          <section class="metric-group compact">
+            <h2>Meta Tags</h2>
+            <div id="meta_tags" class="metric-value"></div>
+          </section>
+
+          <!-- Headers -->
+          <section class="metric-group compact">
+            <h2>Headers</h2>
+            <div id="headers" class="metric-value"></div>
+          </section>
+
+          <!-- Readability -->
+          <section class="metric-group compact">
+            <h2>Readability</h2>
+            <div id="readability_score" class="metric-value"></div>
+            <div id="grade_level" class="metric-value"></div>
+          </section>
+        </div>
+
+        <!-- Right Column -->
+        <div class="column">
+          <!-- Article Keywords -->
+          <section class="metric-group compact">
+            <h2>Top Keywords</h2>
+            <div id="article_keywords" class="metric-value"></div>
+            <div id="keyword_count" class="metric-value"></div>
+          </section>
+
+          <!-- Images -->
+          <section class="metric-group compact">
+            <h2>Images</h2>
+            <div id="images" class="metric-value"></div>
+          </section>
+
+          <!-- Links -->
+          <section class="metric-group compact">
+            <h2>Links</h2>
+            <div id="inbound_links" class="metric-value"></div>
+            <div id="outbound_links" class="metric-value"></div>
+          </section>
+
+          <!-- Length & Stats -->
+          <section class="metric-group compact">
+            <h2>Content Stats</h2>
+            <div id="length" class="metric-value"></div>
+            <div id="stats" class="metric-value"></div>
+          </section>
+
+          <!-- Article Outline -->
+          <section class="metric-group compact">
+            <h2>Article Outline</h2>
+            <div id="article_outline" class="metric-value"></div>
+          </section>
+
+          <!-- Schema -->
+          <section class="metric-group compact">
+            <h2>Schema Markup</h2>
+            <div id="schema" class="metric-value"></div>
+          </section>
+        </div>
+      </div>
+
+      <!-- Article Preview - Full Width at Bottom -->
+      <section class="metric-group full-width">
+        <h2>Article Preview</h2>
+        <div id="article" class="metric-value"></div>
+      </section>
+      </div>
+
+      <div id="error" class="error" style="display: none;">
+        <p>Failed to analyze page. Please try again.</p>
+      </div>
+    </div>
+
+    <!-- Tab 2: Compare Pages -->
+    <div id="tab-compare" class="tab-content">
+      <div class="content">
+        <h2>Compare Pages</h2>
+        <p class="info">Select pages to compare side-by-side</p>
+        <div id="compare-content">
+          <!-- Will be populated by compare.js -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 3: Website Audit -->
+    <div id="tab-website-audit" class="tab-content">
+      <div class="content">
+        <h2>Full Website Audit</h2>
+        <div id="website-audit-content">
+          <!-- Will be populated by website-audit.js -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+  <script src="website-audit.js"></script>
+  <script src="compare.js"></script>
+</body>
+</html>

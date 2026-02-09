@@ -1,2 +1,10 @@
 /.claude
 /discovery
+
+# Signing key — NEVER commit this
+key.pem
+
+# Build artifacts
+/build/
+*.crx
+*.zip

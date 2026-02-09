@@ -1,0 +1,62 @@
+name: Build & Release
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build extension packages
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Verify manifest version matches release tag
+        run: |
+          MANIFEST_VERSION=$(grep -o '"version": *"[^"]*"' manifest.json | head -1 | cut -d'"' -f4)
+          TAG="${GITHUB_REF_NAME#v}"  # strip leading 'v' if present
+          echo "Manifest version: $MANIFEST_VERSION"
+          echo "Release tag:      $TAG"
+          if [[ "$MANIFEST_VERSION" != "$TAG" ]]; then
+            echo "::error::Manifest version ($MANIFEST_VERSION) does not match release tag ($TAG)."
+            echo "Update the version in manifest.json to match your release tag."
+            exit 1
+          fi
+
+      - name: Write signing key from secret
+        run: |
+          echo "${{ secrets.CRX_SIGNING_KEY }}" > key.pem
+          chmod 600 key.pem
+
+      - name: Generate icons
+        run: |
+          # Only generate if PNGs are missing (they may be checked in)
+          if [[ ! -f icon16.png ]] || [[ ! -f icon48.png ]] || [[ ! -f icon128.png ]]; then
+            sudo apt-get update -qq && sudo apt-get install -y -qq librsvg2-bin >/dev/null
+            chmod +x create-icons.sh
+            ./create-icons.sh
+          else
+            echo "Icons already present, skipping generation."
+          fi
+
+      - name: Build ZIP and signed CRX
+        run: |
+          chmod +x build.sh
+          ./build.sh all
+
+      - name: Upload release assets
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION=$(grep -o '"version": *"[^"]*"' manifest.json | head -1 | cut -d'"' -f4)
+          gh release upload "${{ github.event.release.tag_name }}" \
+            "build/seo-page-audit-${VERSION}.zip#Chrome Web Store ZIP" \
+            "build/seo-page-audit-${VERSION}.crx#Signed CRX Package"
+
+      - name: Print extension ID
+        run: ./build.sh id

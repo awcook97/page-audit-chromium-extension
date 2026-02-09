@@ -5,7 +5,6 @@
   "description": "Comprehensive SEO analysis tool for web pages",
   "permissions": [
     "activeTab",
-    "scripting",
     "storage"
   ],
   "action": {
